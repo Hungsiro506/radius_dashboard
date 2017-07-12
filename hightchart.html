@@ -1,0 +1,115 @@
+<!DOCTYPE>
+<html>
+    <head>
+        <title>Chart</title>
+        <meta name="charset" content="uft-8">
+
+        <script src="https://code.jquery.com/jquery-2.2.4.min.js"></script>
+        <script src="http://code.highcharts.com/highcharts.js"></script>
+        
+        <!--<script src="/socket.io/socket.io.js"></script>-->
+
+        <style>
+            .highcharts-tooltip>span {
+                background: white;
+                border: 1px solid silver;
+                border-radius: 3px;
+                box-shadow: 1px 1px 2px #888;
+                padding: 8px;
+            }
+            table {
+                margin: 0 auto;
+                border-collapse: collapse;
+            }
+            th {
+                font-weight: bold;
+                text-align: left;
+            }
+            td, th {
+                padding: 5px;
+                border-bottom: 1px solid silver;
+                height: 20px;
+            }
+
+            thead th {
+                border-top: 2px solid gray;
+                border-bottom: 2px solid gray;
+            }
+        </style>
+    </head>
+
+    <body>
+ 
+        <div id="table-sparkline"></div>
+
+        <script type="text/javascript" src="js/sparksetup.js"></script>
+        <script type="text/javascript">
+            $(function(){
+                //var socket = io();
+
+                //config columns
+                var columns = [
+                    {key: "bras_id", name: "Id"},
+                    {key: "signin_total_count", name: "signin_total_count"},
+                    {key: "signin_total_count_chart", name: "signin_total_count chart", chart: true, datafrom: "signin_total_count"},
+                    {key: "logoff_total_count", name: "Log off"},
+                    {key: "logoff_total_count_chart", name: "logoff_total_count chart", chart: true, datafrom: "signin_total_count"},
+                    {key: "label", name: "Label"},
+                    {key: "time", name: "Time"}
+                ]
+                var tablesl = new TableSparkLine("#table-sparkline", columns);
+
+                // socket.on('aggregator-insert', function(data){
+                //     if(typeof(data) !== "object"){
+                //         data = JSON.parse(data);
+                //     }
+                //     console.log(data)
+                //     //insert
+                //     tablesl.addRow([data]);
+                //     tablesl.renderChart();
+                // });
+
+                // socket.on('aggregator-update', function(data){
+                //     if(typeof(data) !== "object"){
+                //         data = JSON.parse(data);
+                //     }
+                //     console.log(data)
+                //     //update
+                //     tablesl.addRow([data], data.bras_id);
+                //     tablesl.renderChart();
+                // });
+
+                
+
+                setInterval(function(){
+                    var getnow = new Date().getTime();
+                    $.ajax({
+                        url: '/getall?time='+getnow,
+                        type: 'GET',
+                        contentType: 'application/json',
+                        dataType:'json',
+                        success: function(result){
+                            var data = result.data;
+                            for(var i in data){
+                                tablesl.addRow(data[i]);
+                                tablesl.renderChart();
+                            }
+                        }
+                    });
+                }, 1000 * 90)
+
+                
+
+                // setTimeout(function(){
+                //     var data = [
+                //         {bras_id: "11", chart: "11, 33, 44, 88", time: "44444"}
+                //     ]
+                //     tablesl.addRow(data, data[0].id);
+                //     tablesl.renderChart();
+                // }, 1000);
+
+            });
+        </script>
+
+    </body>
+</html>

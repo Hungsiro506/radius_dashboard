@@ -1,0 +1,19 @@
+{
+  "name": "realtime-dashboard",
+  "version": "1.0.0",
+  "description": "realtime-dashboard",
+  "main": "server-mongo.js",
+  "scripts": {
+    "test": "echo \\\"Error: no test specified\\\" && exit 1",
+    "start": "node server-mongo.js"
+  },
+  "author": "hungdv",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.15.0",
+    "mongo-oplog-watch": "^1.0.3",
+    "mongoose": "^4.10.8",
+    "nodemon": "^1.11.0",
+    "socket.io": "^1.7.3"
+  }
+}
